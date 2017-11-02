@@ -2,6 +2,7 @@ package api_rest
 
 import grails.converters.JSON
 import grails.converters.XML
+import grails.transaction.Transactional
 
 class ApiController{
 
@@ -200,29 +201,15 @@ class ApiController{
             case "POST":
                 System.out.println("params : "+params)
                 def libraryInstance = new Library(params)
-                if (libraryInstance.save(flush: true)) {
-                    render(status: 201, text: " The new Library has been saved")
-                    return
-                }
-                else{
-                    render(status: 400,text: "The Library is not saved")
-                    return
-                }
+                saveLibrary(libraryInstance)
                 break;
 
 
 
             case "PUT":
+                System.out.println("params : "+params)
                 def libraryInstance = Library.get(params.idLibrary)
-                if(libraryInstance) {
-                    libraryInstance.save(flush:true)
-                    render(status: 201, text: "Library with ${params.idLibrary} ID is Updated")
-                    return
-                }
-                else {
-                    render(status: 404, text: "Library with ${params.idLibrary} ID is not Found")
-                    return
-                }
+                updateLibrary(libraryInstance)
                 break;
 
 
@@ -247,4 +234,42 @@ class ApiController{
         }
 
     }
+
+    /************************************************Persistance*****************************************************/
+    @Transactional
+    def saveLibrary(Library library){
+        if (library == null) {
+            transactionStatus.setRollbackOnly()
+            render(status: 400,text: "The Library is not saved cause NULL")
+            return
+        }
+
+        if (library.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            render(status: 400,text: "The Library is not saved cause has Error")
+            return
+        }
+
+        library.save flush:true
+        render(status: 201, text: " The new Library has been saved")
+    }
+
+    @Transactional
+    def updateLibrary(Library library){
+        if (library == null) {
+            transactionStatus.setRollbackOnly()
+            render(status: 400,text: "The Library is not Updated cause NULL")
+            return
+        }
+
+        if (library.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            render(status: 400,text: "The Library is not Updated cause has Error")
+            return
+        }
+
+        library.save flush:true
+        render(status: 201, text: " The new Library has been Updated")
+    }
+
 }
