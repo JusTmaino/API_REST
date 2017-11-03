@@ -98,17 +98,42 @@ class ApiController{
 
             case "PUT":
                 System.out.println("params : "+params)
-                if(params.id != null){
-                    def bookInstance = Book.get(params.id)
-                    updateBook(bookInstance)
+                if (params.idLibrary == null) {
+                    if(params.id != null){
+                        def bookInstance = Book.get(params.id)
+                        updateBook(bookInstance)
+                    }
+                    else{
+                        render(status: 404, text: "ID Book Not Found")
+                        return
+                    }
                 }
-                else if(params.idBook != null){
-                    def bookInstance = Book.get(params.idBook)
-                    updateBook(bookInstance)
-                }
-                else{
-                    render(status: 404, text: "ID Book Not Found")
-                    return
+                else {
+                    def libraryInstance = Library.get(params.idLibrary)
+                    if(libraryInstance != null) {
+                        if(params.idBook != null){
+                            def bookInstance = null
+                            def booksList = libraryInstance.getBooks()
+                            (0..booksList.size() - 1).each {
+                                int i ->
+                                    if (booksList[i].equals(Book.findById(params.idBook))){
+                                        bookInstance = Book.findById(params.idBook)
+                                    }
+                            }
+
+                            if (bookInstance!=null) {
+                                updateBook(bookInstance)
+                            }
+                            else {
+                                render(status: 400, text: "The Book with ID ${params.idBook} does not exist on Library with ID ${params.idLibrary}")
+                                return
+                            }
+                        }
+                        else{
+                            render(status: 404, text: "ID Book Not Found")
+                            return
+                        }
+                    }
                 }
 
                 break;
