@@ -84,13 +84,12 @@ class ApiController{
             case "POST":
                 System.out.println("params : "+params)
                 def bookInstance = new Book(params)
-                if (bookInstance.save(flush: true)) {
-                    render(status: 201, text: " The new Book has been saved")
-                    return
+                if (params.idLibrary == null) {
+                    saveBook(bookInstance,0)
                 }
                 else{
-                    render(status: 400,text: "The Book is not saved")
-                    return
+                    def libraryInstance = Library.get(params.idLibrary)
+                    saveBook(bookInstance,Integer.parseInt(params.idLibrary))
                 }
 
                 break;
@@ -98,16 +97,20 @@ class ApiController{
 
 
             case "PUT":
-                def bookInstance = Book.get(params.id)
-                if(bookInstance) {
-                    bookInstance.save(flush:true)
-                    render(status: 201, text: "Book with ${params.id} ID is Updated")
+                System.out.println("params : "+params)
+                if(params.id != null){
+                    def bookInstance = Book.get(params.id)
+                    updateBook(bookInstance)
+                }
+                else if(params.idBook != null){
+                    def bookInstance = Book.get(params.idBook)
+                    updateBook(bookInstance)
+                }
+                else{
+                    render(status: 404, text: "ID Book Not Found")
                     return
                 }
-                else {
-                    render(status: 404, text: "Book with ${params.id} ID is not Found")
-                    return
-                }
+
                 break;
 
 
@@ -117,7 +120,7 @@ class ApiController{
                     def bookInstance = Book.get(params.id)
                     if (bookInstance) {
                         bookInstance.delete(flush: true)
-                        render(status: 201, text: "Book with ${params.id} ID has been Deleted")
+                        render(status: 200, text: "Book with ${params.id} ID has been Deleted")
                         return
                     } else {
                         render(status: 404, text: "Book with ${params.id} ID is not Found")
@@ -141,7 +144,7 @@ class ApiController{
                                         def book = Book.findById(params.idBook)
                                         libraryInstance.removeFromBooks(book)
                                         book.delete(flush: true)
-                                        render(status: 201, text: "The Book with ${params.idBook} ID has been deleted from Library with ${params.idLibrary} ID ")
+                                        render(status: 200, text: "The Book with ${params.idBook} ID has been deleted from Library with ${params.idLibrary} ID ")
                                         return
                                     }
                             }
@@ -218,7 +221,7 @@ class ApiController{
                 def libraryInstance = Library.get(params.idLibrary)
                 if(libraryInstance) {
                     libraryInstance.delete(flush:true)
-                    render(status: 201, text: "Library with ${params.idLibrary} ID has been Deleted")
+                    render(status: 200, text: "Library with ${params.idLibrary} ID has been Deleted")
                     return
                 }
                 else {
@@ -235,18 +238,19 @@ class ApiController{
 
     }
 
-    /************************************************Persistance*****************************************************/
+
+    /************************************************   Save /Update Library   *****************************************************/
     @Transactional
     def saveLibrary(Library library){
         if (library == null) {
             transactionStatus.setRollbackOnly()
-            render(status: 400,text: "The Library is not saved cause NULL")
+            render(status: 400,text: "The Library has not been saved cause NULL")
             return
         }
 
         if (library.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            render(status: 400,text: "The Library is not saved cause has Error")
+            render(status: 400,text: "The Library has not been saved cause has Error")
             return
         }
 
@@ -258,18 +262,90 @@ class ApiController{
     def updateLibrary(Library library){
         if (library == null) {
             transactionStatus.setRollbackOnly()
-            render(status: 400,text: "The Library is not Updated cause NULL")
+            render(status: 404,text: "The Library with ${library.id} ID is not Found")
             return
         }
 
         if (library.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            render(status: 400,text: "The Library is not Updated cause has Error")
+            render(status: 400,text: "The Library has not been Updated cause has Error")
             return
         }
 
+        if(params.name != null){
+            library.name = params.name
+        }
+
+        if(params.address != null){
+            library.address = params.address
+        }
+
+        if(params.yearCreated != null){
+            library.yearCreated = Integer.parseInt(params.yearCreated)
+        }
+
         library.save flush:true
-        render(status: 201, text: " The new Library has been Updated")
+        render(status: 200, text: " The Library with ID ${library.id} has been Updated")
     }
 
+
+    /************************************************   Save /Update Book   *****************************************************/
+    @Transactional
+    def saveBook(Book book,int idLibrary){
+        if (book == null) {
+            transactionStatus.setRollbackOnly()
+            render(status: 400,text: "The Book has not been saved cause NULL")
+            return
+        }
+
+        if (book.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            render(status: 400,text: "The Book has not been saved cause has Error")
+            return
+        }
+
+        if (idLibrary != 0){
+            book.save flush:true
+            def libraryInstance = Library.get(idLibrary)
+            libraryInstance.addToBooks(book)
+            render(status: 201, text: " The new Book has been saved")
+        }
+        else {
+            render(status: 400,text: "The Book has not been saved cause it should  belongs To a library try the same request under /library/idLib/ or /libraries/idLib/")
+        }
+    }
+
+    @Transactional
+    def updateBook(Book book){
+        if (book == null) {
+            transactionStatus.setRollbackOnly()
+            render(status: 404,text: "The Book with ${book.id} ID is not Found")
+            return
+        }
+
+        if (book.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            render(status: 400,text: "The Book has not been Updated cause has Error")
+            return
+        }
+
+        if(params.name != null){
+            book.name = params.name
+        }
+
+        if(params.releaseDate != null){
+            book.releaseDate = Integer.parseInt(params.releaseDate)
+        }
+
+        if(params.isbn != null){
+            book.isbn = params.isbn
+        }
+
+        if(params.author != null){
+            book.author = params.author
+        }
+
+        book.save flush:true
+        render(status: 200, text: " The Book with ID ${book.id} has been Updated")
+    }
 }
