@@ -22,12 +22,14 @@ class UrlMappings {
                 {
                     "/$idLibrary"(controller: 'api', action: 'library')
                     "/$idLibrary/books"(controller: 'api', action: 'book' , idLib :$idLibrary)
+                    "/$idLibrary/book"(controller: 'api', action: 'book' , idLib :$idLibrary)
                     "/$idLibrary/book/$idBook"(controller: 'api', action: 'book' , idLib :$idLibrary)
                 }
         group "/api/library",
                 {
                     "/$idLibrary"(controller: 'api', action: 'library')
                     "/$idLibrary/books"(controller: 'api', action: 'book' , idLib :$idLibrary)
+                    "/$idLibrary/book"(controller: 'api', action: 'book' , idLib :$idLibrary)
                     "/$idLibrary/book/$idBook"(controller: 'api', action: 'book' , idLib :$idLibrary)
                 }
 

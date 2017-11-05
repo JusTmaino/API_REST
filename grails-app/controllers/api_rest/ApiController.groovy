@@ -71,7 +71,7 @@ class ApiController{
                         }
                     }
                     else {
-                        render(status: 404, text: "No Books Found on Library with ${params.idLibrary} ID ")
+                        render(status: 404, text: "No Books Found cause the Library with ${params.idLibrary} ID does not exist ")
                         return
                     }
                 }
@@ -168,7 +168,7 @@ class ApiController{
                                     if (booksList[i].equals(Book.findById(params.idBook))){
                                         def book = Book.findById(params.idBook)
                                         libraryInstance.removeFromBooks(book)
-                                        book.delete(flush: true)
+                                        book.delete flush: true
                                         render(status: 200, text: "The Book with ${params.idBook} ID has been deleted from Library with ${params.idLibrary} ID ")
                                         return
                                     }
@@ -180,7 +180,7 @@ class ApiController{
                         }
                     }
                     else {
-                        render(status: 404, text: "No Books Found on Library with ${params.idLibrary} ID ")
+                        render(status: 404, text: "No Books Found to delete cause Library with ${params.idLibrary} ID does not exist ")
                         return
                     }
                 }
