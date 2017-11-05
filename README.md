@@ -2,8 +2,8 @@
 
 ## LIBRARIES
 
-### Get All Libraries
-Retourne des données json / xml concernant toutes les  « libraries »
+### Get All Libraries 
+Returns json / xml data about all « libraries » .
 
 #### URL:
 /api/libraries
