@@ -7,9 +7,8 @@
 ### URL:
 /api/libraries
 - Method:
-``` 
-	GET
-``` 
+``` GET``` 
+
 ### URL Params
 Required:
 None
@@ -18,9 +17,10 @@ None
 None
 
 ### Success Response:
-- Code: 200 
-	Content: 
-		[{
+- Code: ``` 200 ```
+- Content: 
+		``` 
+	 [{
             "id": 1,
             "address": "138 BD Wilson",
             "books": [
@@ -54,7 +54,8 @@ None
             "name": "Library Antibes",
             "yearCreated": 2016
         }]
+	``` 
 
 ### Error Response :
-	Code: 404 NOT FOUND 
-	Content: { error : "No Libraries Found" }
+- Code: ``` 404 NOT FOUND ``` 
+- Content: ``` { error : "No Libraries Found" }``` 
