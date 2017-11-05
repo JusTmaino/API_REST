@@ -54,8 +54,8 @@ None
         ],
         "name": "Library Antibes",
         "yearCreated": 2016
-    }
-] ``` 
+    } 
+    ``` 
 
 #### Error Response :
 - Code: ``` 404 NOT FOUND ``` 
