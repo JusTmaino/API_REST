@@ -30,5 +30,7 @@ class UrlMappings {
                     "/$idLibrary/books"(controller: 'api', action: 'book' , idLib :$idLibrary)
                     "/$idLibrary/book/$idBook"(controller: 'api', action: 'book' , idLib :$idLibrary)
                 }
+
+        "/api/doc"(controller: 'api', action: 'doc')
     }
 }

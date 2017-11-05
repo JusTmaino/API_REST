@@ -125,12 +125,12 @@ class ApiController{
                                 updateBook(bookInstance)
                             }
                             else {
-                                render(status: 400, text: "The Book with ID ${params.idBook} does not exist on Library with ID ${params.idLibrary}")
+                                render(status: 404, text: "The Book with ID ${params.idBook} does not exist on Library with ID ${params.idLibrary}")
                                 return
                             }
                         }
                         else{
-                            render(status: 404, text: "ID Book Not Found")
+                            render(status: 400, text: "ID Book Not Found")
                             return
                         }
                     }
@@ -287,7 +287,7 @@ class ApiController{
     def updateLibrary(Library library){
         if (library == null) {
             transactionStatus.setRollbackOnly()
-            render(status: 404,text: "The Library with ${library.id} ID is not Found")
+            render(status: 404,text: "The Library is not Found")
             return
         }
 
@@ -332,8 +332,14 @@ class ApiController{
         if (idLibrary != 0){
             book.save flush:true
             def libraryInstance = Library.get(idLibrary)
-            libraryInstance.addToBooks(book)
-            render(status: 201, text: " The new Book has been saved")
+            if (libraryInstance == null){
+                render(status: 404,text: "The Library with ID ${idLibrary} is not Found")
+                return
+            }
+            else {
+                libraryInstance.addToBooks(book)
+                render(status: 201, text: " The new Book has been saved")
+            }
         }
         else {
             render(status: 400,text: "The Book has not been saved cause it should  belongs To a library try the same request under /library/idLib/ or /libraries/idLib/")
@@ -344,7 +350,7 @@ class ApiController{
     def updateBook(Book book){
         if (book == null) {
             transactionStatus.setRollbackOnly()
-            render(status: 404,text: "The Book with ${book.id} ID is not Found")
+            render(status: 404,text: "The Book is not Found")
             return
         }
 
@@ -372,5 +378,18 @@ class ApiController{
 
         book.save flush:true
         render(status: 200, text: " The Book with ID ${book.id} has been Updated")
+    }
+
+
+
+    /************************************************   documentation  *****************************************************/
+
+    def doc(){
+        render("doc \n" +
+                "kcnk \n" +
+                "xscnk \n"+
+                "czv \n" +
+                "dkn " +
+                "http://localhost:8081/api_rest/api/library/1/book?name=New Book on a library 1&releaseDate=1995&isbn=ORKSDF&author=Amine\n")
     }
 }
