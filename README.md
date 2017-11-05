@@ -1,5 +1,11 @@
 # API_REST
 
+The Goal of this Project was to create an simple API REST using GRAILS. We took the exemple of a LIBRARY and BOOKS and try to generate all the possible needs on a simple data model, composed of two entities linked by a composition
+
+The following is a documentation how to use this API , you can get it also under this URL /api/doc
+
+Enjoy !!
+
 ## LIBRARIES
 
 ### - Get All Libraries 
