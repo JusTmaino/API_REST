@@ -1,25 +1,25 @@
 # API_REST
 
-# LIBRARIES
+## LIBRARIES
 
 1) Retourne des données json / xml concernant toutes les  « libraries »
 
-	•	URL:
-        /api/libraries
+### URL:
+/api/libraries
+- Method:
+``` 
+	GET
+``` 
+### URL Params
+Required:
+None
 
-	•	Method:
-        GET
+### Data Params
+None
 
-	•	URL Params
-        Required:
-        None
-
-	•	Data Params
-        None
-
-	•	Success Response:
-	    ◦	Code: 200 
-	    ◦	Content: 
+### Success Response:
+- Code: 200 
+	Content: 
 		[{
             "id": 1,
             "address": "138 BD Wilson",
@@ -55,6 +55,6 @@
             "yearCreated": 2016
         }]
 
-	•	Error Response:
-	◦	Code: 404 NOT FOUND 
-	◦	Content: { error : "No Libraries Found" }
+### Error Response :
+	Code: 404 NOT FOUND 
+	Content: { error : "No Libraries Found" }
