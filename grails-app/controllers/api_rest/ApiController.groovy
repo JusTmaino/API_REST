@@ -157,7 +157,7 @@ class ApiController{
                     def libraryInstance = Library.get(params.idLibrary)
                     if(libraryInstance != null) {
                         if (params.idBook==null){
-                            render(status: 404, text: "There is no Book ID to Delete  ")
+                            render(status: 400, text: "There is no Book ID to Delete  ")
                             return
                         }
                         else {
