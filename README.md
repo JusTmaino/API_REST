@@ -160,6 +160,12 @@ Required:
 ``` 
 id = [integer]
 ```
+Optional:
+``` 
+name = [String]
+address = [String]
+yearCreated = [integer]
+```
 
 #### Data Params
 ``` 
@@ -354,6 +360,13 @@ Update the Book with ID 3  .
 Required:
 ``` 
 id = [integer]
+```
+Optional:
+``` 
+name = [String]
+releaseDate = [integer]
+isbn = [String]
+author = [String]
 ```
 
 #### Data Params
@@ -583,6 +596,13 @@ Required:
 ``` 
 idLibray = [integer]
 idBook = [integer]
+```
+Optional:
+``` 
+name = [String]
+releaseDate = [integer]
+isbn = [String]
+author = [String]
 ```
 
 #### Data Params
